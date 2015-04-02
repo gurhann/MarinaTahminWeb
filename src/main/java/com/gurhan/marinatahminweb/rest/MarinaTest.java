@@ -95,7 +95,7 @@ public class MarinaTest {
     }
   
 
-    @Schedule(second = "0", minute = "*/5", hour = "*", info = "Report every 5 Minutes", persistent = false)
+    @Schedule(second = "0", minute = "0", hour = "*/2", info = "Report every 5 Minutes", persistent = false)
     public void marinaTahminleriniGuncelle() throws IOException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();

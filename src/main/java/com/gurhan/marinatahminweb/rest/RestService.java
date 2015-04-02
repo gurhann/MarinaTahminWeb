@@ -5,11 +5,6 @@
  */
 package com.gurhan.marinatahminweb.rest;
 
-import com.gurhan.marinatahminweb.business.MarinaUcGunlukTahmin;
-import com.gurhan.marinatahminweb.model.Tarih;
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
