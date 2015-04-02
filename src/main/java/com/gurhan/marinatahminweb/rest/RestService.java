@@ -9,13 +9,17 @@ import com.gurhan.marinatahminweb.business.MarinaUcGunlukTahmin;
 import com.gurhan.marinatahminweb.model.Tarih;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
 /**
  *
  * @author gurhan-pc
  */
 @ApplicationPath("RestService")
-public class RestService {
-    
+public class RestService extends Application{
+
+
+ 
 }

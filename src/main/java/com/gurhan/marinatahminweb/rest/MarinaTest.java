@@ -5,18 +5,22 @@
  */
 package com.gurhan.marinatahminweb.rest;
 
+import com.google.gson.Gson;
 import com.gurhan.marinatahminweb.business.MarinaUcGunlukTahmin;
 import com.gurhan.marinatahminweb.model.Liman;
+import com.gurhan.marinatahminweb.model.Tahmin;
 import com.gurhan.marinatahminweb.model.Tarih;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
-import javax.validation.constraints.Past;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -29,15 +33,18 @@ import javax.ws.rs.core.MediaType;
  * @author gurhan-pc
  */
 @Singleton
-@Path("Marina")
+@Path("/Marina")
 public class MarinaTest {
+
     @EJB
     private MarinaUcGunlukTahmin marinaTahmin;
-    
+
     private HashMap<Integer, String> limanlar;
     private HashMap<Integer, ArrayList<Tarih>> marinaUcGunlukTahminler;
+
     @PostConstruct
-    public void init(){
+    public void init() {
+        System.out.println("init çalıştı");
         limanlar = new HashMap<>();
         limanlar.put(17612, "AKÇAKOCA");
         limanlar.put(17310, "ALANYA");
@@ -86,21 +93,40 @@ public class MarinaTest {
         limanlar.put(16667, "MİDİLLİ (Yunanistan)");
         marinaUcGunlukTahminler = new HashMap<>();
     }
-    
-    @Schedule(second = "*", minute = "*/5", hour = "*")
+  
+
+    @Schedule(second = "0", minute = "*/5", hour = "*", info = "Report every 5 Minutes", persistent = false)
     public void marinaTahminleriniGuncelle() throws IOException {
-        System.out.println("timer çalıştı");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        System.out.println("timer çalıştı" + dateFormat.format(date));
         marinaUcGunlukTahminler.clear();;
-        for(Integer key : limanlar.keySet()) {
+        for (Integer key : limanlar.keySet()) {
             marinaUcGunlukTahminler.put(key, marinaTahmin.ucGunlukTahminAl(key));
         }
     }
-    
+
     @GET
     @Path("/tahminAl/{marinaId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<Tarih> tahminAl(@PathParam("int") int marinaId) {
-        return marinaUcGunlukTahminler.get(marinaId);
+    public String tahminAl(@PathParam("marinaId") int marinaId) {
+        try {
+            Gson gson = new Gson();
+
+            return gson.toJson(marinaUcGunlukTahminler.get(marinaId));
+        } catch (Exception e) {
+            return "null döndü";
+        }
+ 
+
+    }
+
+    @GET
+    @Path("/tahminAll/{marinaId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String tahminAll(@PathParam("marinaId") String marinaId) {
+        return "merhaba " + marinaId;
     }
 }
